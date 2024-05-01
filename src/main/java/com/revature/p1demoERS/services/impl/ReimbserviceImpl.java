@@ -3,22 +3,16 @@ package com.revature.p1demoERS.services.impl;
 import com.revature.p1demoERS.dao.ReimbDao;
 import com.revature.p1demoERS.dao.UserDao;
 import com.revature.p1demoERS.dto.ReimbRequestDto;
-import com.revature.p1demoERS.dto.ValidationErrorDto;
+import com.revature.p1demoERS.exception.ReimbNotFoundException;
 import com.revature.p1demoERS.exception.UserNotFoundException;
 import com.revature.p1demoERS.model.Reimbursement;
 import com.revature.p1demoERS.model.Status;
 import com.revature.p1demoERS.model.User;
 import com.revature.p1demoERS.services.ReimbService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -76,8 +70,23 @@ public class ReimbserviceImpl implements ReimbService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.findUserByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        List<com.revature.p1demoERS.model.Reimbursement> reimbursements = reimbDao.findByUserUserIdAndStatus(user.getUserId(), status);
+        List<Reimbursement> reimbursements = reimbDao.findByUserUserIdAndStatus(user.getUserId(), status);
         return reimbursements;
+    }
+
+    @Override
+    public Reimbursement updateDescription(Long id, String description) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.findUserByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        Reimbursement reimbursement = reimbDao.findById(id)
+                .orElseThrow(() -> new ReimbNotFoundException("Reimbursement not found"));
+        if (reimbursement.getUser().getUserId() != user.getUserId()) {
+            throw new ReimbNotFoundException("Reimbursement update for other users are not allowed");
+        }
+        reimbursement.setDescription(description);
+        reimbDao.save(reimbursement);
+        return reimbursement;
     }
 
 }
