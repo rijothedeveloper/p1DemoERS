@@ -3,6 +3,7 @@ package com.revature.p1demoERS.controllers;
 
 import com.revature.p1demoERS.dto.ReimbRequestDto;
 import com.revature.p1demoERS.dto.UpdateReimbRequestDto;
+import com.revature.p1demoERS.dto.UpdateStatusRequestDto;
 import com.revature.p1demoERS.model.Reimbursement;
 import com.revature.p1demoERS.model.Status;
 import com.revature.p1demoERS.services.ReimbService;
@@ -53,7 +54,7 @@ public class ReimbController {
     }
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER')")
-    @PatchMapping
+    @PatchMapping("/updateDescription")
     public ResponseEntity<Reimbursement> updateDescription(@RequestBody UpdateReimbRequestDto updateReimbRequestDto) {
         Reimbursement reimb = reimbService.updateDescription(updateReimbRequestDto.id(), updateReimbRequestDto.description());
         return ResponseEntity.status(200).body(reimb);
@@ -72,6 +73,13 @@ public class ReimbController {
     @GetMapping("/allReimbursements/{status}")
     public ResponseEntity<List<Reimbursement>> geyAllReimbursements(@PathVariable Status status) {
         List<Reimbursement> reimb = reimbService.getAllReimbursements(status);
+        return ResponseEntity.status(200).body(reimb);
+    }
+
+    @PreAuthorize("hasAuthority('MANAGER')")
+    @PatchMapping("/updateStatus")
+    public ResponseEntity<Reimbursement> updateStatus(@RequestBody UpdateStatusRequestDto updateStatusRequestDto) {
+        Reimbursement reimb = reimbService.updateStatus(updateStatusRequestDto.id(), updateStatusRequestDto.status());
         return ResponseEntity.status(200).body(reimb);
     }
 

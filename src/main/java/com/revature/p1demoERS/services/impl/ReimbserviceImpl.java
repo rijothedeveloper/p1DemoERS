@@ -104,4 +104,13 @@ public class ReimbserviceImpl implements ReimbService {
         return reimbursements;
     }
 
+    @Override
+    public Reimbursement updateStatus(Long id, Status status) {
+        Reimbursement reimbursement = reimbDao.findById(id)
+                .orElseThrow(() -> new ReimbNotFoundException("Reimbursement not found"));
+        reimbursement.setStatus(status);
+        reimbDao.save(reimbursement);
+        return reimbursement;
+    }
+
 }
