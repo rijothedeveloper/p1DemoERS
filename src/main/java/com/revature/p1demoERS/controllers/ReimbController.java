@@ -6,6 +6,7 @@ import com.revature.p1demoERS.model.Reimbursement;
 import com.revature.p1demoERS.model.Status;
 import com.revature.p1demoERS.services.ReimbService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +41,13 @@ public class ReimbController {
     @GetMapping
     public ResponseEntity<List<Reimbursement>> geyMyReimbursements() {
         List<Reimbursement> reimb = reimbService.getMyReimbursements();
+        return ResponseEntity.status(200).body(reimb);
+    }
+
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER')")
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Reimbursement>> geyStatusFilteredReimbursements(@PathVariable Status status) {
+        List<Reimbursement> reimb = reimbService.getStatusFilteredReimbursements(status);
         return ResponseEntity.status(200).body(reimb);
     }
 

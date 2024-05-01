@@ -4,6 +4,7 @@ import com.revature.p1demoERS.dao.ReimbDao;
 import com.revature.p1demoERS.dao.UserDao;
 import com.revature.p1demoERS.dto.ReimbRequestDto;
 import com.revature.p1demoERS.dto.ValidationErrorDto;
+import com.revature.p1demoERS.exception.UserNotFoundException;
 import com.revature.p1demoERS.model.Reimbursement;
 import com.revature.p1demoERS.model.Status;
 import com.revature.p1demoERS.model.User;
@@ -52,7 +53,7 @@ public class ReimbserviceImpl implements ReimbService {
 
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.findUserByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         reimb.setUser(user);
 
         reimbDao.save(reimb);
@@ -64,24 +65,19 @@ public class ReimbserviceImpl implements ReimbService {
     public List<Reimbursement> getMyReimbursements() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.findUserByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         List<com.revature.p1demoERS.model.Reimbursement> reimbursements = reimbDao.findByUserUserId(user.getUserId());
 
         return reimbursements;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorDto> handleValidateExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        ValidationErrorDto validationErrorDto = new ValidationErrorDto(errors);
-
-        return ResponseEntity.status(401).body(validationErrorDto);
+    @Override
+    public List<Reimbursement> getStatusFilteredReimbursements(Status status) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.findUserByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        List<com.revature.p1demoERS.model.Reimbursement> reimbursements = reimbDao.findByUserUserIdAndStatus(user.getUserId(), status);
+        return reimbursements;
     }
 
 }

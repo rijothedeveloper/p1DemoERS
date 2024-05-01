@@ -2,6 +2,7 @@ package com.revature.p1demoERS.services.impl;
 
 import com.revature.p1demoERS.dao.UserDao;
 import com.revature.p1demoERS.dto.*;
+import com.revature.p1demoERS.exception.UserNotFoundException;
 import com.revature.p1demoERS.model.Role;
 import com.revature.p1demoERS.model.User;
 import com.revature.p1demoERS.services.AuthenticationService;
@@ -49,9 +50,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.username(), signinRequest.password()));
         } catch (Exception e) {
             return new SignInResponseDto(null, null);
+//            throw new UserNotFoundException("User not found");
         }
         var user = userDao.findUserByUsername(signinRequest.username())
-                .orElseThrow(() -> new IllegalArgumentException("invalid email"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         var jwt = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         SignInResponseDto signInResponseDto = new SignInResponseDto(jwt, refreshToken);
