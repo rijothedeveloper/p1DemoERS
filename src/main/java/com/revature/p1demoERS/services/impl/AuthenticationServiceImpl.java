@@ -37,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setEmail(signupRequest.email());
         user.setFirstName(signupRequest.firstName());
         user.setLastName(signupRequest.lastName());
-        user.setRole(Role.USER);
+        user.setRole(signupRequest.role());
         user.setPassword(passwordEncoder.encode(signupRequest.password()));
         var savedUser = userDao.save(user);
         SignupResponseDto signupResponseDto = new SignupResponseDto(savedUser.getFirstName(), savedUser.getLastName(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getRole());

@@ -61,6 +61,11 @@ public class ReimbController {
 
     /** Manager stories */
 
-
+    @PreAuthorize("hasAuthority('MANAGER')")
+    @GetMapping("/allReimbursements")
+    public ResponseEntity<List<Reimbursement>> geyAllReimbursements() {
+        List<Reimbursement> reimb = reimbService.getAllReimbursements();
+        return ResponseEntity.status(200).body(reimb);
+    }
 
 }

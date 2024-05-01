@@ -14,4 +14,6 @@ public interface ReimbService {
     List<Reimbursement> getStatusFilteredReimbursements(Status status);
 
     Reimbursement updateDescription(Long id, String description);
+
+    List<Reimbursement> getAllReimbursements();
 }
