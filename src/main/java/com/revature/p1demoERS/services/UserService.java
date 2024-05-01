@@ -1,8 +1,8 @@
 package com.revature.p1demoERS.services;
 
-import com.revature.p1demoERS.dto.UserRequestDto;
-import com.revature.p1demoERS.dto.UserResponseDto;
+import com.revature.p1demoERS.dto.SignupRequestDto;
+import com.revature.p1demoERS.dto.SignupResponseDto;
 
 public interface UserService {
-    UserResponseDto createUser(UserRequestDto user);
+    SignupResponseDto createUser(SignupRequestDto user);
 }

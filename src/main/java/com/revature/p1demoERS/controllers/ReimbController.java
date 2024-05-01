@@ -3,18 +3,15 @@ package com.revature.p1demoERS.controllers;
 
 import com.revature.p1demoERS.dto.ReimbRequestDto;
 import com.revature.p1demoERS.dto.ReimbResponseDto;
-import com.revature.p1demoERS.dto.ValidationErrorDto;
+import com.revature.p1demoERS.model.Status;
 import com.revature.p1demoERS.services.ReimbService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -36,6 +33,12 @@ public class ReimbController {
 
         return ResponseEntity.status(201).body(reimbResponseDto);
 
+    }
+
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER')")
+    @GetMapping
+    public ReimbResponseDto geyMyReimbursements() {
+        return new ReimbResponseDto("description", 10.0, Status.PENDING);
     }
 
 

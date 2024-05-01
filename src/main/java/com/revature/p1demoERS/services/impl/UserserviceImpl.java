@@ -1,8 +1,8 @@
 package com.revature.p1demoERS.services.impl;
 
 import com.revature.p1demoERS.dao.UserDao;
-import com.revature.p1demoERS.dto.UserRequestDto;
-import com.revature.p1demoERS.dto.UserResponseDto;
+import com.revature.p1demoERS.dto.SignupRequestDto;
+import com.revature.p1demoERS.dto.SignupResponseDto;
 import com.revature.p1demoERS.model.User;
 import com.revature.p1demoERS.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class UserserviceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto createUser(UserRequestDto userDto) {
+    public SignupResponseDto createUser(SignupRequestDto userDto) {
         if(userDao.findUserByUsername(userDto.username()).isPresent()){
             throw new RuntimeException("Username already exists");
         }
@@ -31,7 +31,7 @@ public class UserserviceImpl implements UserService {
         user.setPassword(userDto.password());
         user.setRole(userDto.role());
         userDao.save(user);
-        UserResponseDto userResponseDto = new UserResponseDto(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getRole());
+        SignupResponseDto userResponseDto = new SignupResponseDto(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getRole());
 
         return userResponseDto;
     }
