@@ -84,6 +84,9 @@ public class ReimbserviceImpl implements ReimbService {
         if (reimbursement.getUser().getUserId() != user.getUserId()) {
             throw new ReimbNotFoundException("Reimbursement update for other users are not allowed");
         }
+        if( reimbursement.getStatus() != Status.PENDING){
+            throw new ReimbNotFoundException("Reimbursement update for status other than pending is not allowed");
+        }
         reimbursement.setDescription(description);
         reimbDao.save(reimbursement);
         return reimbursement;
