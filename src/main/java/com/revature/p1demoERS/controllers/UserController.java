@@ -31,18 +31,4 @@ public class UserController {
         UserResponseDto userResponseDto = userService.createUser(userRequestDto);
         return ResponseEntity.status(201).body(userResponseDto);
     }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorDto> handleValidateExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        ValidationErrorDto validationErrorDto = new ValidationErrorDto(errors);
-
-        return ResponseEntity.status(401).body(validationErrorDto);
-    }
 }

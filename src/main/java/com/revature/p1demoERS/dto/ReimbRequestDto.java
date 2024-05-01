@@ -1,9 +1,7 @@
 package com.revature.p1demoERS.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.*;
 
-public record ReimbRequestDto ( String description, Double amount){
+public record ReimbRequestDto ( @NotBlank String description, @Min(1) Double amount){
 
 }
