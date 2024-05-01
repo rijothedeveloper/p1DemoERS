@@ -2,11 +2,14 @@ package com.revature.p1demoERS.services.impl;
 
 import com.revature.p1demoERS.dao.UserDao;
 import com.revature.p1demoERS.dto.SignupRequestDto;
-import com.revature.p1demoERS.dto.SignupResponseDto;
+import com.revature.p1demoERS.dto.UserResponseDto;
 import com.revature.p1demoERS.model.User;
 import com.revature.p1demoERS.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserserviceImpl implements UserService {
@@ -19,20 +22,11 @@ public class UserserviceImpl implements UserService {
     }
 
     @Override
-    public SignupResponseDto createUser(SignupRequestDto userDto) {
-        if(userDao.findUserByUsername(userDto.username()).isPresent()){
-            throw new RuntimeException("Username already exists");
-        }
-        User user = new User();
-        user.setFirstName(userDto.firstName());
-        user.setLastName(userDto.lastName());
-        user.setUsername(userDto.username());
-        user.setEmail(userDto.email());
-        user.setPassword(userDto.password());
-        user.setRole(userDto.role());
-        userDao.save(user);
-        SignupResponseDto userResponseDto = new SignupResponseDto(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getRole());
-
-        return userResponseDto;
+    public List<UserResponseDto> getAllUsers() {
+        List<User> users = userDao.findAll();
+        List<UserResponseDto> userDtoList = users.stream()
+                .map(user -> new UserResponseDto( user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole()))
+                .toList();
+        return userDtoList;
     }
 }

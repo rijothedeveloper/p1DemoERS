@@ -3,7 +3,6 @@ package com.revature.p1demoERS.services.impl;
 import com.revature.p1demoERS.dao.UserDao;
 import com.revature.p1demoERS.dto.*;
 import com.revature.p1demoERS.exception.UserNotFoundException;
-import com.revature.p1demoERS.model.Role;
 import com.revature.p1demoERS.model.User;
 import com.revature.p1demoERS.services.AuthenticationService;
 import com.revature.p1demoERS.services.JwtService;
@@ -12,9 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -27,7 +23,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private JwtService jwtService;
     @Override
-    public SignupResponseDto signup(SignupRequestDto signupRequest) {
+    public UserResponseDto signup(SignupRequestDto signupRequest) {
 
         if(userDao.findUserByUsername(signupRequest.username()).isPresent()) {
             return null;
@@ -40,7 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole(signupRequest.role());
         user.setPassword(passwordEncoder.encode(signupRequest.password()));
         var savedUser = userDao.save(user);
-        SignupResponseDto signupResponseDto = new SignupResponseDto(savedUser.getFirstName(), savedUser.getLastName(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getRole());
+        UserResponseDto signupResponseDto = new UserResponseDto(savedUser.getFirstName(), savedUser.getLastName(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getRole());
         return signupResponseDto;
     }
 

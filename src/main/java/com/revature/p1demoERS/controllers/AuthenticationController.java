@@ -3,7 +3,7 @@ package com.revature.p1demoERS.controllers;
 import com.revature.p1demoERS.dto.SignInResponseDto;
 import com.revature.p1demoERS.dto.SigninRequestDto;
 import com.revature.p1demoERS.dto.SignupRequestDto;
-import com.revature.p1demoERS.dto.SignupResponseDto;
+import com.revature.p1demoERS.dto.UserResponseDto;
 import com.revature.p1demoERS.services.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequest) {
-        SignupResponseDto signupResponseDto = authenticationService.signup(signupRequest);
+    public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequest) {
+        UserResponseDto signupResponseDto = authenticationService.signup(signupRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(signupResponseDto);

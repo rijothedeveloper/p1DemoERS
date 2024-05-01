@@ -3,7 +3,7 @@ package com.revature.p1demoERS.services;
 import com.revature.p1demoERS.dto.*;
 
 public interface AuthenticationService {
-    SignupResponseDto signup(SignupRequestDto signupRequest);
+    UserResponseDto signup(SignupRequestDto signupRequest);
     SignInResponseDto signin(SigninRequestDto signinRequest);
     SignInResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequest);
 
