@@ -13,4 +13,6 @@ public interface ReimbDao extends JpaRepository<Reimbursement, Long> {
     List<Reimbursement> findByUserUserId(Long userId);
     List<Reimbursement> findByUserUserIdAndStatus(Long userId, Status status);
 
+    List<Reimbursement> findByStatus(Status status);
+
 }

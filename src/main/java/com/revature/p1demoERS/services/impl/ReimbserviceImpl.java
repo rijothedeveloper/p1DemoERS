@@ -98,4 +98,10 @@ public class ReimbserviceImpl implements ReimbService {
         return reimbursements;
     }
 
+    @Override
+    public List<Reimbursement> getAllReimbursements(Status status) {
+        List<Reimbursement> reimbursements = reimbDao.findByStatus(status);
+        return reimbursements;
+    }
+
 }

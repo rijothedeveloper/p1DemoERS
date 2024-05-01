@@ -68,4 +68,11 @@ public class ReimbController {
         return ResponseEntity.status(200).body(reimb);
     }
 
+    @PreAuthorize("hasAuthority('MANAGER')")
+    @GetMapping("/allReimbursements/{status}")
+    public ResponseEntity<List<Reimbursement>> geyAllReimbursements(@PathVariable Status status) {
+        List<Reimbursement> reimb = reimbService.getAllReimbursements(status);
+        return ResponseEntity.status(200).body(reimb);
+    }
+
 }
