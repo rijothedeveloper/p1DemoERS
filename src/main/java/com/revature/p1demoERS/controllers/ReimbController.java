@@ -2,16 +2,16 @@ package com.revature.p1demoERS.controllers;
 
 
 import com.revature.p1demoERS.dto.ReimbRequestDto;
-import com.revature.p1demoERS.dto.ReimbResponseDto;
+import com.revature.p1demoERS.model.Reimbursement;
 import com.revature.p1demoERS.model.Status;
 import com.revature.p1demoERS.services.ReimbService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -26,10 +26,11 @@ public class ReimbController {
         this.reimbService = reimbService;
     }
 
+//    @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER')")
     @PostMapping
-    public ResponseEntity<ReimbResponseDto> createReimb(@Valid @RequestBody ReimbRequestDto reimbRequestDto){
+    public ResponseEntity<Reimbursement> createReimb(@Valid @RequestBody ReimbRequestDto reimbRequestDto){
 
-        ReimbResponseDto reimbResponseDto = reimbService.addReimb(reimbRequestDto);
+        Reimbursement reimbResponseDto = reimbService.addReimb(reimbRequestDto);
 
         return ResponseEntity.status(201).body(reimbResponseDto);
 
@@ -37,8 +38,9 @@ public class ReimbController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('MANAGER')")
     @GetMapping
-    public ReimbResponseDto geyMyReimbursements() {
-        return new ReimbResponseDto("description", 10.0, Status.PENDING);
+    public ResponseEntity<List<Reimbursement>> geyMyReimbursements() {
+        List<Reimbursement> reimb = reimbService.getMyReimbursements();
+        return ResponseEntity.status(200).body(reimb);
     }
 
 

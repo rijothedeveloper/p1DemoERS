@@ -1,10 +1,12 @@
 package com.revature.p1demoERS.services;
 
 import com.revature.p1demoERS.dto.ReimbRequestDto;
-import com.revature.p1demoERS.dto.ReimbResponseDto;
-import org.springframework.stereotype.Service;
+import com.revature.p1demoERS.model.Reimbursement;
+
+import java.util.List;
 
 public interface ReimbService {
 
-    ReimbResponseDto addReimb (ReimbRequestDto reimbRequestDto);
+    Reimbursement addReimb (ReimbRequestDto reimbRequestDto);
+    List<Reimbursement> getMyReimbursements ();
 }

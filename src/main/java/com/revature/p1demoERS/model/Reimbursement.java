@@ -66,11 +66,11 @@ public class Reimbursement {
         this.status = status;
     }
 
-    public User getUseId() {
+    public User getUser() {
         return user;
     }
 
-    public void setUseId(User useId) {
+    public void setUser(User useId) {
         this.user = useId;
     }
 
