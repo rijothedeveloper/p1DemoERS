@@ -26,4 +26,11 @@ public class UserController {
         return ResponseEntity.status(200).body(users);
     }
 
+    @PreAuthorize("hasAuthority('MANAGER')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> DeleteUserById(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.status(200).body("Deleted user with id: " + id);
+    }
+
 }

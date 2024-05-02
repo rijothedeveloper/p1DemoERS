@@ -1,5 +1,6 @@
 package com.revature.p1demoERS.services.impl;
 
+import com.revature.p1demoERS.dao.ReimbDao;
 import com.revature.p1demoERS.dao.UserDao;
 import com.revature.p1demoERS.dto.SignupRequestDto;
 import com.revature.p1demoERS.dto.UserResponseDto;
@@ -14,11 +15,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserserviceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
 
-    public UserserviceImpl(UserDao userDao) {
+    private UserDao userDao;
+    private ReimbDao reimbDao;
+
+    @Autowired
+    public UserserviceImpl(UserDao userDao, ReimbDao reimbDao) {
         this.userDao = userDao;
+        this.reimbDao = reimbDao;
     }
 
     @Override
@@ -28,5 +32,11 @@ public class UserserviceImpl implements UserService {
                 .map(user -> new UserResponseDto( user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole()))
                 .toList();
         return userDtoList;
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        reimbDao.deleteReimbs(id);
+        userDao.deleteById(id);
     }
 }

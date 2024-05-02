@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface UserDao extends JpaRepository<User, Long>{
     Optional<User> findUserByUsername(String username);
 
+
+    void deleteById(Long aLong);
 }
