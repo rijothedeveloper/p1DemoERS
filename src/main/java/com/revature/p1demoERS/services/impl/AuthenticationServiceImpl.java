@@ -45,14 +45,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.username(), signinRequest.password()));
         } catch (Exception e) {
-            return new SignInResponseDto(null, null);
+            return new SignInResponseDto(null, null, null);
 //            throw new UserNotFoundException("User not found");
         }
         var user = userDao.findUserByUsername(signinRequest.username())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         var jwt = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        SignInResponseDto signInResponseDto = new SignInResponseDto(jwt, refreshToken);
+        SignInResponseDto signInResponseDto = new SignInResponseDto(jwt, refreshToken, user.getRole());
         return signInResponseDto;
     }
 
@@ -65,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return null;
         }
         var jwt = jwtService.generateToken(user);
-        SignInResponseDto jwtAuthenticationResponse = new SignInResponseDto(jwt, refreshTokenRequest.token());
+        SignInResponseDto jwtAuthenticationResponse = new SignInResponseDto(jwt, refreshTokenRequest.token(), user.getRole());
         return jwtAuthenticationResponse;
     }
 }
