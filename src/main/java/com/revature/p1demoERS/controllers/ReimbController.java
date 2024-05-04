@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping ("/api/v1/reimbursements")
+@CrossOrigin
 public class ReimbController {
 
 
